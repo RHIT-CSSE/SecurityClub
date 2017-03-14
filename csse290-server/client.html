@@ -1,0 +1,76 @@
+<!-- Author: Ishank Tandon -->
+<!-- Date: January 23, 2017 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Proxy stuff</title>
+    <link rel="shortcut icon" type="image/png" href="http://emulator.online/favicon-32x32.png"/>
+    <style>
+        #succOrError {
+            word-wrap: break-word;
+            display: none;
+            width: 500px;
+            height: 200px;
+            color: black;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        function d(a) {
+            for (var b = "", c = 0; c < a.length; c++) b += String.fromCharCode(a.charCodeAt(c) - 1);
+            return b
+        }
+
+        function setup() {
+            $("#serial-input").keyup(function(event) {
+                if (event.keyCode == 13) {
+                    $("#activateKey").click();
+                }
+            });
+            $(document).ready(function() {
+                $("#activateKey").click(letsDoThis)
+            })
+        }
+
+        function letsDoThis() {
+            let num = $('#serial-input').val();
+            if (num >=1 && num <= 100) {
+                $.ajax({
+                    url: "http://compsecpractice.csse.rose-hulman.edu:8888/proxy/" + $('#serial-input').val(),
+                    type: "GET",
+                    success: function(data) {
+                        console.log(data)
+                        $("#succOrError").html(data['key']);
+                        $("#succOrError").css({'display': 'block', 'color':'black'});
+                    },
+                    error: function(a, b, c) {
+                        console.log(c, b, a)
+                    }
+                });
+            } else {
+                $("#succOrError").html("Enter a number between 1 and 100");
+                $("#succOrError").css({'display': 'block', 'color':'red'});
+            }
+        }
+        $(window).on("load", setup);
+    </script>
+</head>
+
+<body>
+    <div id="x-body">
+        <div style="margin-top: 5em;">
+            <div>
+                <h1>Enter a number between 1-100</h1>
+                <div>
+                    <input id="serial-input" style="height: 45px; font-size: 25px;">
+                    <br>
+                    <button type="button" id="activateKey" style="margin: 10px">Press me or press Enter</button>
+                </div>
+                <div id="succOrError"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
